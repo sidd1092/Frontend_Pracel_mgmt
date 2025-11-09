@@ -1,0 +1,111 @@
+<div class="velo-bg">
+  <div class="velo-grid">
+    <div class="velo-form-container">
+      <div class="velo-logo">
+        <span class="company-name">Velo</span>
+      </div>
+      <h2>Book a Parcel</h2>
+      <p class="velo-info">Fill in the details below to schedule your delivery!</p>
+
+      <div class="velo-section-title">Your Info</div>
+      <div class="velo-user-details">
+        <div><b>Name:</b> {{ currentUser.name }}</div>
+        <div><b>Address:</b> {{ currentUser.address }}</div>
+        <div><b>Contact:</b> {{ currentUser.contact }}</div>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" #bookingForm="ngForm" autocomplete="off">
+        <!-- Receiver Info -->
+        <div class="velo-section-title">Receiver Information</div>
+
+        <div class="velo-field">
+          <label for="receiverName">Receiver Name</label>
+          <input id="receiverName" name="receiverName" [(ngModel)]="booking.receiverName" required class="velo-input" />
+        </div>
+
+        <div class="velo-field">
+          <label for="receiverAddress">Receiver Address</label>
+          <textarea id="receiverAddress" name="receiverAddress" [(ngModel)]="booking.receiverAddress" rows="2" required class="velo-input"></textarea>
+        </div>
+
+        <div class="velo-form-row">
+          <div class="velo-field">
+            <label for="receiverPin">Receiver Pin</label>
+            <input id="receiverPin" name="receiverPin" [(ngModel)]="booking.receiverPin" required class="velo-input" />
+          </div>
+          <div class="velo-field">
+            <label for="receiverMobile">Receiver Mobile</label>
+            <input id="receiverMobile" name="receiverMobile" type="tel" [(ngModel)]="booking.receiverMobile" required class="velo-input" />
+          </div>
+        </div>
+
+        <!-- Parcel Details -->
+        <div class="velo-section-title">Parcel Information</div>
+
+        <div class="velo-field">
+          <label for="weight">Parcel Weight (grams)</label>
+          <input id="weight" name="weight" type="number" min="1" [(ngModel)]="booking.parcelWeight" required class="velo-input" />
+        </div>
+
+        <div class="velo-field">
+          <label for="contents">Parcel Contents Description</label>
+          <textarea id="contents" name="contents" rows="2" [(ngModel)]="booking.parcelContentsDescription" required class="velo-input"></textarea>
+        </div>
+
+        <div class="velo-field">
+          <label for="deliveryType">Parcel Delivery Type</label>
+          <select id="deliveryType" name="deliveryType" [(ngModel)]="booking.parcelDeliveryType" required class="velo-input">
+            <option value="" disabled>Select delivery type</option>
+            <option value="Standard">Standard Delivery</option>
+            <option value="Express">Express Delivery</option>
+            <option value="SameDay">Same-Day Delivery</option>
+          </select>
+        </div>
+
+        <div class="velo-field">
+          <label for="packingPreference">Parcel Packing Preference</label>
+          <select id="packingPreference" name="packingPreference" [(ngModel)]="booking.parcelPackingPreference" required class="velo-input">
+            <option value="" disabled>Select packing preference</option>
+            <option value="Basic">Basic Packing</option>
+            <option value="Premium">Premium Packing</option>
+          </select>
+        </div>
+
+        <div class="velo-form-row">
+          <div class="velo-field">
+            <label for="pickupTime">Parcel Pickup Time</label>
+            <input id="pickupTime" name="pickupTime" type="datetime-local" [(ngModel)]="booking.parcelPickupTime" required class="velo-input" />
+          </div>
+          <div class="velo-field">
+            <label for="dropoffTime">Parcel Dropoff Time</label>
+            <input id="dropoffTime" name="dropoffTime" type="datetime-local" [(ngModel)]="booking.parcelDropoffTime" required class="velo-input" />
+          </div>
+        </div>
+
+        <!-- Calculated Service Cost Display -->
+        <div class="velo-cost-info">
+          <strong>Estimated Service Cost: </strong> ₹{{ calculateParcelServiceCost() | number:'1.2-2' }}
+        </div>
+
+        <div class="velo-buttons">
+          <button type="button" (click)="onReset()" class="velo-btn-grey">Reset</button>
+          <button type="submit" class="velo-btn-red" [disabled]="!bookingForm.form.valid">Book Now</button>
+        </div>
+      </form>
+
+      <!-- Booking Result Acknowledgment -->
+      <div *ngIf="bookingId" class="velo-success" style="margin-top: 1.2rem;">
+        <p>✅ Booking Successful! Your Booking ID is: <b>{{ bookingId }}</b></p>
+        <p>Please proceed to <a [routerLink]="['/payment']">payment</a> to complete the booking.</p>
+      </div>
+
+      <div *ngIf="error" class="velo-error" style="margin-top: 1rem;">
+        <span>{{ error }}</span>
+      </div>
+    </div>
+
+    <div class="velo-image-side">
+      <img src="https://static.vecteezy.com/system/resources/previews/023/743/919/non_2x/courier-delivery-man-holding-parcel-box-with-mobile-phone-fast-online-delivery-service-online-ordering-internet-e-commerce-ideas-for-websites-or-banners-3d-perspective-illustration-free-png.png" alt="Parcel Booking" class="velo-img" />
+    </div>
+  </div>
+</div>
